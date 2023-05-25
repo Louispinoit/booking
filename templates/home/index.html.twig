@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <nav class="bg-gray-800 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <span class="text-white text-lg font-bold">BliblHiTech</span>
+            {% if firstname is defined %}
+                <a href="/logout" class="text-red-500 hover:text-red-700">Se déconnecter</a>
+            {% else %}
+                <div>
+                    <a href="{{ path('app_register') }}" class="mr-8 text-blue-500 hover:underline">S'inscrire</a>
+                    <a href="{{ path('app_login') }}" class="text-blue-500 hover:underline">Se connecter</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class=" min-h-screen py-8">
+        <div class="max-w-3xl mx-auto px-4">
+
+
+            {% if app.session.flashbag.has('success') %}
+                <div class="alert alert-success">
+                    {{ app.session.flashbag.get('success')[0] }}
+                </div>
+            {% endif %}
+
+            {% if firstname is defined %}
+                <p class="text-3xl font-bold mb-8">Bonjour {{ firstname }}!</p>
+
+                <h2 class="text-xl font-bold mt-8">Vos emprunts :</h2>
+
+                {% if loans is not empty %}
+                    <ul class="list-disc pl-6 mt-4">
+                        {% for loan in loans %}
+                            {% if not loan.isLoanBack() %}
+                                <li  class="list-none mb-4">
+                                    <div class="bg-gray-100 rounded-md p-4">
+                                        <div class="flex justify-between">
+                                            <h4 class="text-xl font-bold">Livres</h4>
+                                            <span class="text-gray-600">{{ loan.getDateStart()|date('d/m/Y') }}</span>
+                                        </div>
+                                        <ul class="mt-2">
+                                            {% for book in loan.getIdBook() %}
+                                                <li class="text-lg">{{ book.title }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="flex justify-between mt-4">
+                                            <div>
+                                                <span class="text-gray-600">Date butoire :</span>
+                                                <span class="text-lg">{{ loan.getDateEnd()|date('d/m/Y') }}</span>
+                                            </div>
+                                            <a href="#" class="text-red-500 hover:text-red-700">Rendre le livre</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500 mt-4">Aucun prêt en cours.</p>
+                {% endif %}
+
+
+
+
+                <h2 class="text-xl font-bold mt-8">Liste de livres disponibles :</h2>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    {% for categorie in categories %}
+                        <a href="{{ path('categorie_show', {'id': categorie.id}) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200">
+                            {{ categorie.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h1 class="text-3xl font-bold mb-8">Bienvenue sur la BliblHiTech! ✅</h1>
+            {% endif %}
+
+
+        </div>
+    </div>
+{% endblock %}
