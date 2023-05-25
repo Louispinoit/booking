@@ -42,14 +42,6 @@ class RegistrationService {
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-//            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-//                (new TemplatedEmail())
-//                    ->from(new Address('mrcocoen@gmail.com', 'Cocoen'))
-//                    ->to($user->getEmail())
-//                    ->subject('Please Confirm your Email')
-//                    ->htmlTemplate('registration/confirmation_email.html.twig')
-//            );
-
             return ['success' => true, 'form' => $form];
         }
 

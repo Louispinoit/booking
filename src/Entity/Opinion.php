@@ -7,19 +7,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OpinionRepository::class)]
-class Opinion
+class Opinion extends BaseEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'opinions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'opinions')]
-    private ?book $book = null;
+    private ?Book $book = null;
 
     #[ORM\Column]
     private ?int $notation = null;
@@ -30,29 +26,24 @@ class Opinion
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_publish = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getIdUser(): ?user
+    public function getIdUser(): ?User
     {
         return $this->user;
     }
 
-    public function setIdUser(?user $user): self
+    public function setIdUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getIdBook(): ?book
+    public function getIdBook(): ?Book
     {
         return $this->book;
     }
 
-    public function setIdBook(?book $book): self
+    public function setIdBook(?Book $book): self
     {
         $this->book = $book;
 

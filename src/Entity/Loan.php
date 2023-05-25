@@ -9,16 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LoanRepository::class)]
-class Loan
+class Loan extends BaseEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'loans')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Book::class, inversedBy: 'loans')]
     private Collection $id_book;
@@ -29,27 +25,27 @@ class Loan
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_end = null;
 
+    #[ORM\Column]
+    private ?bool $loan_back = null;
+
     public function __construct()
     {
         $this->id_book = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getIdUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setIdUser(?user $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
+
+
 
     /**
      * @return Collection<int, book>
@@ -95,6 +91,18 @@ class Loan
     public function setDateEnd(\DateTimeInterface $date_end): self
     {
         $this->date_end = $date_end;
+
+        return $this;
+    }
+
+    public function isLoanBack(): ?bool
+    {
+        return $this->loan_back;
+    }
+
+    public function setLoanBack(bool $loan_back): self
+    {
+        $this->loan_back = $loan_back;
 
         return $this;
     }

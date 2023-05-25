@@ -9,12 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-class Book
+class Book extends BaseEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -23,7 +19,7 @@ class Book
     private ?string $author = null;
 
     #[ORM\Column]
-    private ?int $isbn = null;
+    private ?string $isbn = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $publicate_date = null;
@@ -38,16 +34,15 @@ class Book
     #[ORM\OneToMany(mappedBy: 'id_book', targetEntity: Opinion::class)]
     private Collection $opinions;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->loans = new ArrayCollection();
         $this->opinions = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getTitle(): ?string
     {
@@ -97,15 +92,14 @@ class Book
         return $this;
     }
 
-    public function getIdCategorie(): ?categorie
+    public function getCategorie(): ?Categorie
     {
         return $this->categorie;
     }
 
-    public function setIdCategorie(?categorie $categorie): self
+    public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
-
         return $this;
     }
 
@@ -165,4 +159,23 @@ class Book
 
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+
 }
